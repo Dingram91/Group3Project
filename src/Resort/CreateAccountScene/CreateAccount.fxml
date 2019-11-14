@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="btnCreateAccount" prefHeight="600.0" prefWidth="1000.0" styleClass="root" xmlns="http://javafx.com/javafx/8.0.181" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Resort.CreateAccountScene.CreateAccountController">
+<AnchorPane fx:id="btnCreateAccount" prefHeight="600.0" prefWidth="1000.0" styleClass="root" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Resort.CreateAccountScene.CreateAccountController">
    <children>
       <ImageView fx:id="homeLogo" fitHeight="120.0" fitWidth="125.0" layoutX="14.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true" />
       <Button fx:id="btnHome" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onMouseClicked="#btnClickHome" onMouseEntered="#btnHomeEntered" onMouseExited="#btnHomeExited" prefHeight="109.0" prefWidth="85.0" styleClass="transparent" stylesheets="@CreateAccount.css" />
@@ -130,9 +130,11 @@
                   <String fx:value="btnCreateAccount" />
                </styleClass>
             </Button>
-            <Label fx:id="lblError" layoutX="283.0" layoutY="339.0" text="Error" textFill="RED" />
-            <Label fx:id="lblPasswordE" layoutX="95.0" layoutY="254.0" text="*" textFill="RED" />
-            <Label fx:id="lblCPasswordE" layoutX="158.0" layoutY="306.0" text="*" textFill="RED" />
+            <Label fx:id="lblError" layoutX="246.0" layoutY="339.0" text="Error: check * fields" textFill="RED" />
+            <Label fx:id="lblErrorNoteP" layoutX="95.0" layoutY="254.0" text="*" textFill="RED" />
+            <Label fx:id="lblErrorNoteCP" layoutX="158.0" layoutY="306.0" text="*" textFill="RED" />
+            <Label fx:id="lblErrorNoteEM" layoutX="132.0" layoutY="206.0" text="*" textFill="RED" />
+            <Label fx:id="lblErrorNoteUN" layoutX="101.0" layoutY="154.0" text="*" textFill="RED" />
          </children>
       </AnchorPane>
       <Label fx:id="CreateAccountTitle" alignment="CENTER" contentDisplay="CENTER" layoutX="253.0" layoutY="21.0" prefHeight="74.0" prefWidth="499.0" styleClass="header" stylesheets="@CreateAccount.css" text="Create Account" textFill="WHITE">

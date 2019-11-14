@@ -10,6 +10,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -39,8 +41,10 @@ public class CreateAccountController {
 
   @FXML private Label lblCreateIndicate;
   @FXML private Label lblError;
-  @FXML private Label lblPasswordE;
-  @FXML private Label lblCPasswordE;
+  @FXML private Label lblErrorNoteP;
+  @FXML private Label lblErrorNoteCP;
+  @FXML private Label lblErrorNoteEM;
+  @FXML private Label lblErrorNoteUN;
 
   @FXML private TextField tfFirstName;
   @FXML private TextField tfLastName;
@@ -77,6 +81,11 @@ public class CreateAccountController {
     homeLogo.setFitHeight(100);
 
     lblError.setVisible(false);
+    lblErrorNoteP.setVisible(false);
+    lblErrorNoteCP.setVisible(false);
+    lblErrorNoteEM.setVisible(false);
+    lblErrorNoteUN.setVisible(false);
+
   }
 
   @FXML void btnClickHome(MouseEvent event) throws IOException {
@@ -98,8 +107,8 @@ public class CreateAccountController {
 
   @FXML void btnClickCreateAccount(MouseEvent event) {
     // todo add code to validate values and give appropriate error messages for incorrect values
-
-    if(!CheckUsernameExists(tfUsername.getText())){
+// && emailValidate(tfEmail.toString())
+    if(!CheckUsernameExists(tfUsername.getText()) && tfPassword.getText().equals(tfConfirmPassword.getText())){
 
       DatabaseAgent.addUser(
               tfUsername.getText(),
@@ -123,11 +132,17 @@ public class CreateAccountController {
       timeline.play();
       lblCreateIndicate.setVisible(false);
       lblError.setVisible(false);
+      lblErrorNoteP.setVisible(false);
+      lblErrorNoteCP.setVisible(false);
+      lblErrorNoteEM.setVisible(false);
+      lblErrorNoteUN.setVisible(false);
 
     }else{
       lblError.setVisible(true);
-
-
+      lblErrorNoteP.setVisible(true);
+      lblErrorNoteCP.setVisible(true);
+      lblErrorNoteEM.setVisible(true);
+      lblErrorNoteUN.setVisible(true);
     }
   }
 
@@ -180,8 +195,16 @@ public class CreateAccountController {
     }
     return usernameExists;
   }
+  //[a-zA-Z0-9._-][a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}
+  //user@domain.com
+  private static boolean validEmail(String email) {
+    return email.matches("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?");
+  }
+
+  public static boolean emailValidate(String email) {
+    Matcher matcher = Pattern.compile("^([\\w-\\.]+){1,64}@([\\w&&[^_]]+){2,255}(.[a-z]{2,3})+$|^$", Pattern.CASE_INSENSITIVE).matcher(email);
+
+    return matcher.find();
+  }
+
 }
-
-
-
-
