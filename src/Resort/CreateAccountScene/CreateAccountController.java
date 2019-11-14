@@ -5,6 +5,10 @@ import Resort.Utility.DatabaseAgent;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
@@ -34,6 +38,9 @@ public class CreateAccountController {
   @FXML private ImageView homeLogo;
 
   @FXML private Label lblCreateIndicate;
+  @FXML private Label lblError;
+  @FXML private Label lblPasswordE;
+  @FXML private Label lblCPasswordE;
 
   @FXML private TextField tfFirstName;
   @FXML private TextField tfLastName;
@@ -68,6 +75,8 @@ public class CreateAccountController {
     homeLogo.setImage(pineapple);
     homeLogo.setFitWidth(65);
     homeLogo.setFitHeight(100);
+
+    lblError.setVisible(false);
   }
 
   @FXML void btnClickHome(MouseEvent event) throws IOException {
@@ -90,27 +99,36 @@ public class CreateAccountController {
   @FXML void btnClickCreateAccount(MouseEvent event) {
     // todo add code to validate values and give appropriate error messages for incorrect values
 
-    DatabaseAgent.addUser(
-        tfUsername.getText(),
-        tfFirstName.getText(),
-        tfLastName.getText(),
-        tfPassword.getText(),
-        tfEmail.getText(),
-        tfAddress.getText(),
-        tfState.getText(),
-        tfzipcode.getText(),
-        tfCreditCardNumber.getText(),
-        tfCvv.getText());
+    if(!CheckUsernameExists(tfUsername.getText())){
 
-    // displays "Account Successful" label to blink three times when button clicked
-    lblCreateIndicate.setVisible(true);
-    Timeline timeline =
-        new Timeline(
-            new KeyFrame(Duration.seconds(0.8), evt -> lblCreateIndicate.setVisible(false)),
-            new KeyFrame(Duration.seconds(0.4), evt -> lblCreateIndicate.setVisible(true)));
-    timeline.setCycleCount(3);
-    timeline.play();
-    lblCreateIndicate.setVisible(false);
+      DatabaseAgent.addUser(
+              tfUsername.getText(),
+              tfFirstName.getText(),
+              tfLastName.getText(),
+              tfPassword.getText(),
+              tfEmail.getText(),
+              tfAddress.getText(),
+              tfState.getText(),
+              tfzipcode.getText(),
+              tfCreditCardNumber.getText(),
+              tfCvv.getText());
+
+      // displays "Account Successful" label to blink three times when button clicked
+      lblCreateIndicate.setVisible(true);
+      Timeline timeline =
+              new Timeline(
+                      new KeyFrame(Duration.seconds(0.8), evt -> lblCreateIndicate.setVisible(false)),
+                      new KeyFrame(Duration.seconds(0.4), evt -> lblCreateIndicate.setVisible(true)));
+      timeline.setCycleCount(3);
+      timeline.play();
+      lblCreateIndicate.setVisible(false);
+      lblError.setVisible(false);
+
+    }else{
+      lblError.setVisible(true);
+
+
+    }
   }
 
   public void btnHomeEntered(MouseEvent mouseEvent) {
@@ -132,7 +150,6 @@ public class CreateAccountController {
     homeLogo.setImage(pineapple);
   }
 
-
   /*
    public CreateAccountController(Stage CreateAccount) throws IOException {
 
@@ -146,4 +163,25 @@ public class CreateAccountController {
 
   */
 
+  public static boolean CheckUsernameExists(String username){
+    boolean usernameExists = false;
+
+    try{
+      Connection connection = DatabaseAgent.getConnection();
+
+      PreparedStatement st = connection.prepareStatement("select * from ACCOUNTS where USERNAME = ?");
+      st.setString(1, username);
+      ResultSet r1=st.executeQuery();
+      if(r1.next()) {
+        usernameExists = true;
+      }
+      } catch (SQLException ex) {
+      ex.printStackTrace();
+    }
+    return usernameExists;
+  }
 }
+
+
+
+
